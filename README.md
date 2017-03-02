@@ -19,3 +19,10 @@
             }
 
         })
+## 加载多个ajax
+    $.when(
+        $.getJSON('aa.html'),
+        $.getJSON('bb.html')
+    ).then(function(a, b) {  // 或者也可以使用 ".done"}
+        //奖品数据
+        加载多个ajax
