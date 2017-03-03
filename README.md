@@ -53,3 +53,16 @@
         }
     }
     </script>
+    
+##原生transform
+
+    var cycle = window.document.getElementById("cycle")
+    var deg = self.$("#cycle").css("-webkit-transform")
+    //App.showToast("deg   " )
+    deg = deg.substring(7, deg.length - 4)
+    var mathDeg = parseInt(deg)
+    cycle.style.webkitTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
+    cycle.style.MozTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
+    cycle.style.msTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
+    cycle.style.OTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
+    cycle.style.transform = "rotate(" + (mathDeg + key * 45) + "deg)";
