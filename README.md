@@ -66,3 +66,9 @@
     cycle.style.msTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
     cycle.style.OTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
     cycle.style.transform = "rotate(" + (mathDeg + key * 45) + "deg)";
+    
+接口实时加上?t="+new Date().getTime()
+
+    $.ajax({
+    url: "href?t="+new Date().getTime()
+    })
