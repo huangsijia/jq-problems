@@ -78,7 +78,7 @@
     }
     </script>
     
-##原生transform
+## 原生transform,原生js动画
 
     var cycle = window.document.getElementById("cycle")
     var deg = self.$("#cycle").css("-webkit-transform")
@@ -91,8 +91,17 @@
     cycle.style.OTransform = "rotate(" + (mathDeg + key * 45) + "deg)";
     cycle.style.transform = "rotate(" + (mathDeg + key * 45) + "deg)";
     
-接口实时加上?t="+new Date().getTime()
+    element.css({
+        'transition-timing-function': 'linear',
+        'transition-duration': '5000ms',
+        'transform': 'translate3d(-' + (width * 2) + 'px,0px,0px)' //设置页面X轴移动
+        });
+    
+## 接口实时加上?t="+new Date().getTime()
 
     $.ajax({
     url: "href?t="+new Date().getTime()
-    })
+    })
+
+    
+    
