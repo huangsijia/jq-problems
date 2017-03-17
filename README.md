@@ -103,5 +103,9 @@
     url: "href?t="+new Date().getTime()
     })
 
-    
-    
+## tab
+    $(".report_menu li").hover(function(){
+        var ind = $(this).index();
+        $(this).addClass("on").siblings().removeClass("on");
+        $(".report_tab li").eq(ind).show().siblings().hide();
+    })
