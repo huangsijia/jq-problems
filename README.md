@@ -109,3 +109,55 @@
         $(this).addClass("on").siblings().removeClass("on");
         $(".report_tab li").eq(ind).show().siblings().hide();
     })
+
+
+## template
+    <script src="../../js/artTemplate.js"></script>
+    <script id="tp_test" type="text/template">
+    {{each data as item}}
+    <div class="item">
+        <a href="{{item.url}}">
+            <div class="report_l1">
+                <img src="{{item.img}}" alt="" />
+            </div>
+            <div class="report_bt"><span>{{item.title}}</span><i></i></div>
+        </a>
+    </div>
+    {{/each}}
+    </script>
+    <script>
+        $(".report_menu li").click(function(){
+            var ind = $(this).index(),
+                txt = "report" + $(this).text();
+
+            $(this).addClass("on").siblings().removeClass("on");
+            $(".report_tab .item").eq(ind).show().siblings().hide();
+
+            getList(txt);
+        });
+
+        var reportList = [];
+
+        getList("report2017");
+
+        function getList(txt) {
+
+            if(reportList[txt]){
+                darwHtml(reportList[txt])
+            }else{
+                $.ajax({
+                    url:"10.0.1.247:9007/web/about/report.html",
+                    data:{"yearType": txt},
+                    success:function (json) {
+                        darwHtml(json);
+                        reportList[txt]=json
+                    }
+                });
+            }
+
+        }
+        function darwHtml(json){
+            $(".report_tab").html(template('tp_test', json));
+        }
+
+    </script>
