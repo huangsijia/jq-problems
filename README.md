@@ -160,4 +160,32 @@
             $(".report_tab").html(template('tp_test', json));
         }
 
-    </script>
+    </script>
+## 自适应h5
+    <meta name="viewport" id="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent) ||
+                window.innerWidth < 500;
+        }
+        function setScale() {
+            if (window.top !== window) {
+                return;
+            }
+            var pageScale = 1;
+
+            var width = document.documentElement.clientWidth || 320;
+            var height = document.documentElement.clientHeight || 486;
+
+            if (width / height >= 320 / 486) {
+                pageScale = height / 486;
+            } else {
+                pageScale = width / 320;
+            }
+            // meta
+            var content = 'width=320, initial-scale=' + pageScale + ', maximum-scale=' + pageScale + ', user-scalable=no';
+            document.getElementById('viewport').setAttribute('content', content);
+        }
+
+        if (isMobile()) {
+            setScale();
+        }
