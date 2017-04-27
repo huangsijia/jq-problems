@@ -230,6 +230,7 @@
                 lift.find("[data-anchor=" + currentItem + "]").addClass("curr");
             }
         });
+        
 ##获取服务器时间
 
         function getServerTime(){
