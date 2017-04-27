@@ -189,3 +189,59 @@
         if (isMobile()) {
             setScale();
         }
+        
+##右边菜单滚动
+
+        var lift = $("#lift");
+        $.fn.scrollView = function () {
+            return this.each(function () {
+                $('html, body').animate({
+                    scrollTop: $(this).offset().top - $(window).height() / 10 + 92
+                }, 1000);
+            });
+        }
+
+        $("#lift a").click(function () {
+
+            var pid = $(this).attr("data-anchor");
+            $(pid).scrollView();
+        });
+
+        $(window).scroll(function () {
+            var scrollTop = $(document).scrollTop();
+            var boxTop = $("#f4").offset().top;
+            var contentItems = $(".list"), currentItem;
+            if (scrollTop >= boxTop) {
+                lift.css({opacity: "1", transform: "scale(1)", visibility: "visible"});
+            } else {
+                lift.css({opacity: "0", transform: "scale(0)", visibility: "hidden"});
+            }
+
+            contentItems.each(function () {
+                var contentItem = $(this);
+                var offsetTop = contentItem.offset().top;
+                if (scrollTop > offsetTop - 200) {
+                    currentItem = "#" + contentItem.attr("id");
+                }
+            });
+
+            if (currentItem && currentItem != lift.find(".curr").attr("data-anchor")) {
+                lift.find(".curr").removeClass("curr");
+                lift.find("[data-anchor=" + currentItem + "]").addClass("curr");
+            }
+        });
+##获取服务器时间
+
+        function getServerTime(){
+            $.ajax({
+                url:window.location.href.toString(),
+                async:false,
+                success: function(data, status, xhr) {
+                    //console.log(xhr.getResponseHeader("Date"));
+                }
+            });
+            return new Date()
+        }
+        var serverTime = getServerTime().getTime(),
+        time = new Date('2017/05/09 00:00:00').getTime();//当前时间
+
