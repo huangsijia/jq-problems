@@ -190,7 +190,7 @@
             setScale();
         }
         
-##右边菜单滚动
+## 右边菜单滚动
 
         var lift = $("#lift");
         $.fn.scrollView = function () {
@@ -231,7 +231,7 @@
             }
         });
         
-##获取服务器时间
+## 获取服务器时间
 
         function getServerTime(){
             $.ajax({
