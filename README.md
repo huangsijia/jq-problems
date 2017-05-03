@@ -244,5 +244,36 @@
             return new Date()
         }
         var serverTime = getServerTime().getTime(),
-        time = new Date('2017/05/09 00:00:00').getTime();//当前时间
+        time = new Date('2017/05/09 00:00:00').getTime();//当前时间
+##  题目
+
+    1、eval是做什么的？有什么类似的api吗？
+    它的功能是把对应的字符串解析成JS代码并运行；
+    应该避免使用eval，不安全，非常耗性能（2次，一次解析成js语句，一次执行）。
+    由JSON字符串转换为JSON对象的时候可以用eval，var obj =eval('('+ str +')');
+
+    2、“===”和”==”有什么区别
+    =会做类型转换  ===强等于 
+
+    3、	'' == '0' // false 
+    0 == '' // true 
+    0 == '0' // true 
+    false == 'false' // false 
+    false == '0' // true 
+    false == undefined // false 
+    false == null // false 
+    null == undefined // true 
+    ' \t\r\n ' == 0 // true
+
+    4、写出下面JavaScript代码输出的内容
+    var arr = [1, 2, 3];
+    for (var i = 0, j; j = arr[++i];) {
+      console.log(j);
+    }
+    console.log(i);
+    console.log(j);
+    //2,3,3，undefined 
+
+    5、用css+html实现下面的图形
+    width:0;height:0;border-bottom:10px;
 
