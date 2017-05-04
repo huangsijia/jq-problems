@@ -275,5 +275,7 @@
     //2,3,3，undefined 
 
     5、用css+html实现下面的图形
-    width:0;height:0;border-bottom:10px;
+    width:0;height:0;border-bottom:10px;
+## 转码
+    encodeURIComponent
 
