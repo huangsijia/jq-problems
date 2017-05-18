@@ -278,4 +278,18 @@
     width:0;height:0;border-bottom:10px;
 ## 转码
     encodeURIComponent
-
+## 身份证
+    Vue.filter('formatIdCart',function(value){
+      var length = value.length - 4;
+      var temp = "";
+      for(var i = 0; i < length; i++){
+        if(i % 4 == 0){
+          console.log(i);
+          temp += " *";
+        }else{
+          temp += "*";
+        }
+      }
+      var last =  value.substr(length, length+4);
+      return temp + last;
+    })
