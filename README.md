@@ -297,4 +297,8 @@
 ## 表单验证用户名，身份证，银行卡
     var regName = /^[\u4e00-\u9fa5]{2,6}$/;
     var regIdCard = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-    var regBank = /^[0-9]{16,19}$/;
+    var regBank = /^[0-9]{16,19}$/;
+    
+## 时间戳
+    timeStamp
+    new Date().getTime()
