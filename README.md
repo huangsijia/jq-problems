@@ -302,3 +302,6 @@
 ## 时间戳
     timeStamp
     new Date().getTime()
+    
+## input不输入空格
+     @input="keyFun" onkeyPress="var keyCode = event.keyCode;if ((keyCode >= 48 && keyCode <= 57)){event.returnValue = true;} else {event.returnValue = false;}"
