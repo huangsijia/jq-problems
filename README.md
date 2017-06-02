@@ -305,3 +305,9 @@
     
 ## input不输入空格
      @input="keyFun" onkeyPress="var keyCode = event.keyCode;if ((keyCode >= 48 && keyCode <= 57)){event.returnValue = true;} else {event.returnValue = false;}"
+
+## 只显示10条数据
+    u = navigator.userAgent; // 排名
+    if(!!u.match(/AppleWebKit.*Mobile.*/) && !!u.match(/AppleWebKit/)){
+        json.list= json.list.slice(0,10);
+    }
