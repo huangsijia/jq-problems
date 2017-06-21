@@ -318,5 +318,10 @@
     3. 在jQuery 3.0中，这种方法已被弃用，只是jQuery.uniqueSort()的别名。请使用该方法代替。
     
 ## 1.排序；2.替换匹配字符串
-1.[1,3,5,10].sort((a,b)=>a-b)
-2."bob".replace(/b/g,"c")==="coc"
+    1.[1,3,5,10].sort((a,b)=>a-b)
+    2."bob".replace(/b/g,"c")==="coc"
+## vue挖矿
+    @function pxToRem($px) {
+        @return $px/11/2+rem;
+    }
+
