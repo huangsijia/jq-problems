@@ -320,7 +320,8 @@
 ## 1.排序；2.替换匹配字符串
     1.[1,3,5,10].sort((a,b)=>a-b)
     2."bob".replace(/b/g,"c")==="coc"
-## vue挖矿
+    
+## 想念vue无数坑洞总结
     @function pxToRem($px) {
         @return $px/11/2+rem;
     }
