@@ -325,4 +325,16 @@
     @function pxToRem($px) {
         @return $px/11/2+rem;
     }
+## 2000>>2,000.00
+    function fmoney (s, n) {
+      n = n > 0 && n <= 20 ? n : 2
+      s = parseFloat((s + '').replace(/[^\d\.-]/g, '')).toFixed(n) + ''
+      var l = s.split('.')[0].split('').reverse()
+      var r = s.split('.')[1]
+      var t = ''
+      for (var i = 0; i < l.length; i++) {
+        t += l[i] + ((i + 1) % 3 === 0 && (i + 1) !== l.length ? ',' : '')
+      }
+      return t.split('').reverse().join('') + '.' + r
+    }
 
