@@ -337,4 +337,10 @@
       }
       return t.split('').reverse().join('') + '.' + r
     }
-
+    
+## 手机浏览器返回没有加载js
+    window.onpageshow = function (e) {
+     if (e.persisted) {
+           window.location.reload(true)
+     } 
+    }
