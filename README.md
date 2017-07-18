@@ -344,3 +344,5 @@
            window.location.reload(true)
      } 
     }
+## vue启不来
+    npm rebuild node-sass
