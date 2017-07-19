@@ -350,3 +350,35 @@
 ## json互转
     JSON.parse
     JSON.stringify
+    
+## vue获取地址to.query.后缀=true
+    beforeEnter: (to, from, next) => {
+          Public.API_GET({
+                url: 'checkMemberBank',
+                success: (result) => {
+                if(!result.isSuccess){
+                    Toast({
+                    message: result.message,
+                    position: 'bottom',
+                    duration: 2000
+                    });
+                    return
+                }
+                  //是否开通存管
+                  if(result.data.kaitong){
+                    to.query.cunguan=true
+                  }else{
+                    to.query.cunguan=false
+                  }
+                  if (result.data.bind) {
+                    next();
+                  } else {
+                    next({ path: '/home',query: to.query});
+                  }
+                }
+            });
+        }
+    
+## vue传参
+    window.Hub.mobile = result.data.mobile;
+    this.mobile = window.Hub.mobile
