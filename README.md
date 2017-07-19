@@ -382,3 +382,6 @@
 ## vue传参
     window.Hub.mobile = result.data.mobile;
     this.mobile = window.Hub.mobile
+    
+## 表单验证错误
+    this.errors.errors
