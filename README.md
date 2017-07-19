@@ -346,3 +346,7 @@
     }
 ## vue启不来
     npm rebuild node-sass
+    
+## json互转
+    JSON.parse
+    JSON.stringify
