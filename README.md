@@ -385,3 +385,7 @@
     
 ## 表单验证错误
     this.errors.errors
+## 跳转
+    this.$router.push({
+        path: '/index'
+    });
