@@ -321,10 +321,7 @@
     1.[1,3,5,10].sort((a,b)=>a-b)
     2."bob".replace(/b/g,"c")==="coc"
     
-## 想念vue无数坑洞总结
-    @function pxToRem($px) {
-        @return $px/11/2+rem;
-    }
+
 ## 2000>>2,000.00
     function fmoney (s, n) {
       n = n > 0 && n <= 20 ? n : 2
@@ -344,48 +341,9 @@
            window.location.reload(true)
      } 
     }
-## vue启不来
-    npm rebuild node-sass
+
     
 ## json互转
     JSON.parse
     JSON.stringify
     
-## vue获取地址to.query.后缀=true
-    beforeEnter: (to, from, next) => {
-          Public.API_GET({
-                url: 'checkMemberBank',
-                success: (result) => {
-                if(!result.isSuccess){
-                    Toast({
-                    message: result.message,
-                    position: 'bottom',
-                    duration: 2000
-                    });
-                    return
-                }
-                  //是否开通存管
-                  if(result.data.kaitong){
-                    to.query.cunguan=true
-                  }else{
-                    to.query.cunguan=false
-                  }
-                  if (result.data.bind) {
-                    next();
-                  } else {
-                    next({ path: '/home',query: to.query});
-                  }
-                }
-            });
-        }
-    
-## vue传参
-    window.Hub.mobile = result.data.mobile;
-    this.mobile = window.Hub.mobile
-    
-## 表单验证错误
-    this.errors.errors
-## 跳转
-    this.$router.push({
-        path: '/index'
-    });
