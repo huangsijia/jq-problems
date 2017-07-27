@@ -347,3 +347,8 @@
     JSON.parse
     JSON.stringify
     
+## 正则字符串
+    new RegExp("^1[3|4|5|7|8][0-9]{9}$")时不能有斜杠/
+## 字符串转number
+    Number("123")
+    
