@@ -1,85 +1,102 @@
-/*获取服务器时间*/
-function getServerTime(){
-    var xmlHttp = false;
-    try {
-        xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-    } catch (e) {
-        try {
-            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (e2) {
-            xmlHttp = false;
-        }
-    }
-
-    if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
-        xmlHttp = new XMLHttpRequest();
-    }
-
-    var severtime;
-    try {
-        xmlHttp.open("GET", window.location.href.toString(), false);
-        xmlHttp.setRequestHeader("Range", "bytes=-1");
-        xmlHttp.send(null);
-         severtime=new Date(xmlHttp.getResponseHeader("Date"));
-    } catch (e) {
-         severtime=new Date();
-    }
-    
-    return severtime
-}
-
-function CountDown(startTime,dom) {
-    console.log(dom)
-    var timer,currentTime,serverTime,ms;
-    var flg=true;
-    serverTime=getServerTime(); //获取服务器当前时间
-    ms=initialDate(startTime);  //初始化结束时间
-
-        //计算时间
-        var showTimer = function () {
-            serverTime+=1000;
-            currentTime = (ms - serverTime) / 1000;   //一共多少秒
-            if (currentTime >0) {
-                var hour = Math.floor(currentTime / 3600);
-                var minute = Math.floor(currentTime % 3600 / 60);
-                var second = Math.floor(currentTime % 3600 % 60);
-                dispose(hour, $(dom).find('.js-hour'));
-                dispose(minute, $(dom).find('.js-min'));
-                dispose(second, $(dom).find('.js-sec'));
+## 获取服务器时间
+        function getServerTime(){
+            var xmlHttp = false;
+            try {
+                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e2) {
+                    xmlHttp = false;
+                }
             }
-            else{
+
+            if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+                xmlHttp = new XMLHttpRequest();
+            }
+
+            var severtime;
+            try {
+                xmlHttp.open("GET", window.location.href.toString(), false);
+                xmlHttp.setRequestHeader("Range", "bytes=-1");
+                xmlHttp.send(null);
+                 severtime=new Date(xmlHttp.getResponseHeader("Date"));
+            } catch (e) {
+                 severtime=new Date();
+            }
+
+            return severtime
+        }
+## 倒计时
+        function CountDown(startTime,dom) {
+            console.log(dom)
+            var timer,currentTime,serverTime,ms;
+            var flg=true;
+            serverTime=getServerTime(); //获取服务器当前时间
+            ms=initialDate(startTime);  //初始化结束时间
+
+                //计算时间
+                var showTimer = function () {
+                    serverTime+=1000;
+                    currentTime = (ms - serverTime) / 1000;   //一共多少秒
+                    if (currentTime >0) {
+                        var hour = Math.floor(currentTime / 3600);
+                        var minute = Math.floor(currentTime % 3600 / 60);
+                        var second = Math.floor(currentTime % 3600 % 60);
+                        dispose(hour, $(dom).find('.js-hour'));
+                        dispose(minute, $(dom).find('.js-min'));
+                        dispose(second, $(dom).find('.js-sec'));
+                    }
+                    else{
+                        clearInterval(timer);
+                        dispose(0,".countdown-second li");
+                        $(".details1_timing_mark").hide();
+                        $(".buy").show();
+                        window.location.reload();
+                    }
+                };
+
+                //处理DOM
+                var dispose = function (time, element) {
+                    $(element).text(time);
+                };
+
+                //初始化日期格式
+                function initialDate(time) {
+                    time = time.replace(new RegExp("-", "gm"), "/");
+                    return new Date(time).getTime();
+                }
+
+                //获得服务器当前时间
+                function getServerTime() {
+                    var http_request;
+                    if (window.XMLHttpRequest) {
+                        http_request = new XMLHttpRequest();
+                    } else {
+                        http_request = new ActiveXObject('Microsoft.XMLHTTP');
+                    }
+                    http_request.open('HEAD',location.href + "?" + Math.random(1, 5),false);
+                    http_request.send(null);
+                    return new Date(http_request.getResponseHeader('Date')).getTime();
+                }
+
                 clearInterval(timer);
-                dispose(0,".countdown-second li");
-                $(".details1_timing_mark").hide();
-                $(".buy").show();
-                window.location.reload();
-            }
-        };
-
-        //处理DOM
-        var dispose = function (time, element) {
-            $(element).text(time);
-        };
-
-        //初始化日期格式
-        function initialDate(time) {
-            time = time.replace(new RegExp("-", "gm"), "/");
-            return new Date(time).getTime();
+                timer = setInterval(showTimer, 1000);
         }
 
-        //获得服务器当前时间
-        function getServerTime() {
-            var http_request;
-            if (window.XMLHttpRequest) {
-                http_request = new XMLHttpRequest();
-            } else {
-                http_request = new ActiveXObject('Microsoft.XMLHTTP');
-            }
-            http_request.open('HEAD',location.href + "?" + Math.random(1, 5),false);
-            http_request.send(null);
-            return new Date(http_request.getResponseHeader('Date')).getTime();
-        }
-
-        clearInterval(timer);
-        timer = setInterval(showTimer, 1000);
-}
+## 格式化时间
+    Date.prototype.Format = function (fmt) { //author: meizz 
+        var o = {
+            "M+": this.getMonth() + 1, //月份 
+            "d+": this.getDate(), //日 
+            "h+": this.getHours(), //小时 
+            "m+": this.getMinutes(), //分 
+            "s+": this.getSeconds(), //秒 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S": this.getMilliseconds() //毫秒 
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
