@@ -351,4 +351,6 @@
     new RegExp("^1[3|4|5|7|8][0-9]{9}$")时不能有斜杠/
 ## 字符串转number
     Number("123")
+## chrome form用js去submit,无效提示Form submission canceled because the form is not connected
+    解决方案$(document.body).append(form);
     
