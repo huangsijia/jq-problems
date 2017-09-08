@@ -379,5 +379,11 @@
             result += "," + numStr.substr(extra+i * 3,3); 
         }
         return result.replace(/^,/,"");
+    }    
+    console.log(numFormat(123456789));//123,456,789
+## 正则
+    function numberFormat(val){
+    var numArr=String(val).split(".");
+    numArr[0] = numArr[0].replace(new RegExp("(\\d)(?=(\\d{3})+$)","ig"),"$1,");
+    return numArr.join(".");
     }
-    console.log(numFormat(123456789));//123,456,789
