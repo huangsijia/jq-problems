@@ -353,4 +353,17 @@
     Number("123")
 ## chrome form用js去submit,无效提示Form submission canceled because the form is not connected
     解决方案$(document.body).append(form);
-    
+## 一万亿以内的人民币小写转大写，暂不考虑连续零的处理
+    function moneyCaseConvert(num){
+        var upperArr=["零","壹","贰","叁","肆","伍","陆","柒","捌","玖"],
+            levelArr=["","拾","佰","仟","万","拾","佰","仟","亿","拾","佰","仟","万"],
+            numArr=num.toString().split("").reverse(),
+            result=[];
+        for(var i=numArr.length-1;i>=0;i--)
+            result.push(upperArr[numArr[i]]+levelArr[i]);
+        return result.join("");
+    }
+
+    //Test
+    console.log(CaseConversion(1234567891234));
+    //壹万贰仟叁佰肆拾伍亿陆仟柒佰捌拾玖万壹仟贰佰叁拾肆
