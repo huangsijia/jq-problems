@@ -367,3 +367,17 @@
     //Test
     console.log(CaseConversion(1234567891234));
     //壹万贰仟叁佰肆拾伍亿陆仟柒佰捌拾玖万壹仟贰佰叁拾肆
+    
+## 整数转为千分位记数法
+    function numFormat(val){
+        var numStr = val.toString(),
+            length = numStr.length,
+            extra = length % 3,
+            count = (length - extra)/3,
+            result = numStr.substr(0,extra);
+        for(var i = 0; i < count; i++){
+            result += "," + numStr.substr(extra+i * 3,3); 
+        }
+        return result.replace(/^,/,"");
+    }
+    console.log(numFormat(123456789));//123,456,789
