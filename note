@@ -25,5 +25,6 @@ function f() { console.log('I am outside!'); }
 上面代码在 ES5 中运行，会得到“I am inside!”，因为在if内声明的函数f会被提升到函数头部，实际运行的代码如下。
 
 Object.freeze冻结函数
+global 对象
 
 声明变量的六种方法（var function let const import class）
