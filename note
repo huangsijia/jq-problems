@@ -1,0 +1,29 @@
+http://es6.ruanyifeng.com/#docs/let
+错：function bar(x = y, y = 2) {
+  return [x, y];
+}
+bar(); // 报错
+上面代码中，调用bar函数之所以报错（某些实现可能不报错），是因为参数x默认值等于另一个参数y，而此时y还没有声明，属于”死区“。如果y的默认值是x，就不会报错，因为此时x已经声明了。
+
+对：function bar(x = 2, y = x) {
+  return [x, y];
+}
+bar(); // [2, 2]
+另外，下面的代码也会报错，与var的行为不同。
+
+
+function f() { console.log('I am outside!'); }
+
+(function () {
+  if (false) {
+    // 重复声明一次函数f
+    function f() { console.log('I am inside!'); }
+  }
+
+  f();
+}());
+上面代码在 ES5 中运行，会得到“I am inside!”，因为在if内声明的函数f会被提升到函数头部，实际运行的代码如下。
+
+Object.freeze冻结函数
+
+声明变量的六种方法（var function let const import class）
