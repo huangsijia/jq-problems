@@ -28,3 +28,12 @@ Object.freeze冻结函数
 global 对象
 
 声明变量的六种方法（var function let const import class）
+
+数值的扩展，为什么我最后打印出来的是2
+Math.sign = Math.sign || function(x) {
+  x = +x; // convert to a number
+  if (x === 0 || isNaN(x)) {
+    return x;
+  }
+  return x > 0 ? 1 : -1;
+};
