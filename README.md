@@ -387,3 +387,6 @@
     numArr[0] = numArr[0].replace(new RegExp("(\\d)(?=(\\d{3})+$)","ig"),"$1,");
     return numArr.join(".");
     }
+## 禁止页面被iframe
+    http://www.jb51.net/article/56889.htm
+    https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options
