@@ -298,7 +298,7 @@
     var regName = /^[\u4e00-\u9fa5]{2,6}$/;
     var regIdCard = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
     var regBank = /^[0-9]{16,19}$/;
-    
+    var regMobile = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
 ## 时间戳
     timeStamp
     new Date().getTime()
