@@ -390,3 +390,6 @@
 ## 禁止页面被iframe
     http://www.jb51.net/article/56889.htm
     https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options
+    
+## 页面加载不出来
+    $(document).on("click",".submit", function () {})
