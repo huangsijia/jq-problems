@@ -41,7 +41,23 @@
                 });
             }, false);
         })
-        
+        (function() {
+            var videoPlay = document.getElementById("video"),
+                partStart = document.getElementById("partStart"),
+                partVideo = $(".partVideo"),
+                partLink = $(".partLink");
+
+            partStart.addEventListener('touchstart', function() {
+                $(".partStart").hide();
+                partVideo.show();
+                videoPlay.play();
+            });
+
+            videoPlay.onended = function() {
+                partVideo.hide();
+                partLink.show();
+            };
+        })()
         
 ## 加载多个ajax
     $.when(
