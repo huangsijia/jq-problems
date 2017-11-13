@@ -409,3 +409,15 @@
     
 ## 页面加载不出来
     $(document).on("click",".submit", function () {})
+## 复制
+    <p class="txt">BXJR2017HSB513</p>
+    <textarea style="width:0;height:0" cols="20" rows="10" class="copy">BXJR2017HSB514</textarea>
+    <a class="btn">点击复制</a>
+    <script>
+        $(".btn ").on("click ", function() {
+            var txt = $(".copy");
+            txt.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+            alert("已复制好，可贴粘。");
+        })
+    </script>
