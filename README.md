@@ -421,3 +421,8 @@
             alert("已复制好，可贴粘。");
         })
     </script>
+    
+## 防止页面被框架包含
+    if(top.location != self.location && ".baidu.com/".indexOf(top.location.href) == -1){
+        top.location = self.location;//防止页面被框架包含
+    }
