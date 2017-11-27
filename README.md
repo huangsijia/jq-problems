@@ -427,4 +427,5 @@
         top.location = self.location;//防止页面被框架包含
     }
 ## 只允许输入俩位小数
+    $(this).val($(this).val().replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1"));
     this.amount = this.amount.replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1");
