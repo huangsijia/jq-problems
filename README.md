@@ -428,4 +428,6 @@
     }
 ## 只允许输入俩位小数
     $(this).val($(this).val().replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1"));
-    this.amount = this.amount.replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1");
+    this.amount = this.amount.replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1");
+## 只允许输入数字
+    onkeyPress="var keyCode = event.keyCode;if ((keyCode >= 48 && keyCode <= 57) || keyCode == 46){event.returnValue = true;}else {event.returnValue = false;}"
