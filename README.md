@@ -434,3 +434,15 @@
 
 ## location
  var whichTab = location.pathname.split('/'),nowTab = whichTab[whichTab.length-1];
+ 
+## 并发双接口
+    $.when(
+    $.getJSON('${resource(file: 'assets/mobile/js/success.json')}'),
+    $.getJSON('${resource(file: '/secure/get-login-info.html')}')
+    ).then(function(a,b){
+        var json=a[0],data=b[0]
+        json.username=data.username;
+        json.mobile=data.mobile;
+        var success = template('success', json);
+        $('.gold-success').html(success);
+    });
