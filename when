@@ -309,25 +309,4 @@ $(function(){
             setScale();
         }
     }
-
-
-    var wechatShare=new WeChatShare();
-    var shareData ={
-        shareConfig:{
-            title: "[有人@你]宝象金融又搞活动啦，话费充值很便宜！真的！",
-            desc: "宝象金融会员有福啦，每月可享话费优惠充值。会赚钱更会省钱！",
-            link: "http://bxjr.com/lc/channel/channel/share?mark=BX_HFCZ_2016&taskId=PC",
-            imgUrl: "http://bxwd-img.oss-cn-hangzhou.aliyuncs.com/upload/image/1701/c046647c-8698-4f4e-81a0-285c2a9e26cb.jpg"
-        },
-        menuList:{
-            menuList: [
-                'menuItem:readMode', // 阅读模式
-                'menuItem:share:timeline', // 分享到朋友圈
-                'menuItem:copyUrl', // 复制链接
-                'menuItem:share:appMessage'
-            ]
-        },
-        callback:function(){}
-    };
-    wechatShare.init(shareData);
 })
