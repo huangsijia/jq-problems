@@ -446,3 +446,5 @@
         var success = template('success', json);
         $('.gold-success').html(success);
     });
+## tab取值
+    e.currentTarget.dataset.tab
