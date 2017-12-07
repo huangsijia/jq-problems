@@ -294,7 +294,7 @@
     width:0;height:0;border-bottom:10px;
 ## 转码
     encodeURIComponent
-## 身份证
+## 身份证，姓名，电话
     Vue.filter('formatIdCart',function(value){
       var length = value.length - 4;
       var temp = "";
@@ -309,6 +309,21 @@
       var last =  value.substr(length, length+4);
       return temp + last;
     })
+function name(value){
+            var len = value.length;
+            var symbol = value.slice(1, len).length;
+            var str = "";
+            for (var i = 0; i < symbol; i++) {
+                str += "*";
+            }
+            return value.replace(value.slice(1, len), str);
+        }
+        function mobile(value){
+            value = value.toString();
+            if (value && value.length == 11) {
+                return value.substr(0, 3) + " **** " + value.substr(7, 11);
+            }
+        }
     
 ## 表单验证用户名，身份证，银行卡
     var regName = /^[\u4e00-\u9fa5]{2,6}$/;
