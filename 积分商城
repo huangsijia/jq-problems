@@ -1,0 +1,97 @@
+<script>
+    //初始数据
+    var lock = true;//如果为false不请求数据
+    var pageOffset = 0;//分页
+    var pageMax = 100;//每页显示个数
+    initData();
+    function initData(){
+        var num = "hot",j = $("#item-"+num).index();
+        $(".gold-mall-tab a").eq(j).addClass("active").siblings().removeClass("active");
+        $(".item").eq(j).show().siblings().hide();
+        getListData(num,true);
+        getBanner();
+    }
+    function getBanner(){
+        var isWeixin=/MicroMessenger/i.test(navigator.userAgent);
+        $.ajax({
+            url:"${createLinkWeb(controller: 'commodity', action: 'homeBxbInfo')}",
+            beforeSend:function(){
+                $(".loading").html("<img src='${resource(file: 'js/layer1.9/skin/default/loading-1.gif')}' />")
+            },
+            success:function(res){
+                $(".loading").hide();
+                if(!res.success){
+                    layer.hAlert(res.message,1);
+                }
+                if(!res.bxbNum){
+                    res.bxbNum = 0
+                }
+                res.isWeixin = isWeixin;
+                var banner = template('banner', res);
+                $('#gold-mall-banner').html(banner);
+            }
+        });
+    }
+    function getListData(nowTab,isFirst){
+        var classType = 0;
+        if(nowTab == "hot"){classType = 0}
+        else if(nowTab == "card"){classType = 1}
+        else{classType = 2}
+
+        if(isFirst){
+            pageOffset = 0;
+            lock = true;
+        }
+    //数据接口
+    if(lock){
+            $.ajax({
+                url:"${createLinkWeb(controller: 'commodity', action: 'homeCommodityList')}",
+                data:{classType:classType,offset:pageOffset,max: pageMax},
+                type:"post",
+                success:function(res){
+                    if(!res.success){
+                        layer.hAlert(res.message,1);
+                    }
+                    if(res.commodityList){
+                        pageOffset += res.commodityList.length;
+                        if(res.commodityList.length < pageMax){
+                            lock = false;
+                        }
+                        if(res.commodityList.length == 0){
+                            return
+                        }
+                    }
+                    var html = template('list', res);
+                    if(isFirst){
+                        $('#item-'+nowTab).html(html);
+                    }else{
+                        $('#item-'+nowTab).append(html);
+                    }
+                    exchange();
+                }
+            });
+    }
+    }
+    //切换tab
+    $(".gold-mall-tab a").on("click",function(e){
+        var k = $(this).index();
+        $(".active").removeClass("active");
+        $(this).addClass("active");
+        $(".item").eq(k).show().siblings().hide();
+        if($(".item").eq(k).find("li").length > 0){
+            return;
+        }
+        getListData(e.currentTarget.dataset.tab,true);
+    });
+    //跳转详情
+    function exchange(){
+        $(".commodity").on("click",function(){
+            var commodityId = $(this).attr("id");
+            location.href = "${createLinkWeb(controller: 'commodity',action: 'detail')}?commodityId="+commodityId;
+        });
+    }
+    $(window).bind('scroll', function () {
+        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+            getListData($(".active")[0].dataset.tab,false)
+        }
+    })
