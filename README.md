@@ -463,3 +463,5 @@ function name(value){
     });
 ## tab取值
     e.currentTarget.dataset.tab
+## 后台返回含标签修改为文案
+    $(".gold-mall-bottom").html($('<div>').html(res.commodityVO.synopsis).text());
