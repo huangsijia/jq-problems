@@ -144,6 +144,11 @@
                         lock = true;
                         if(!res.success){
                             lock = false;
+                            if(pageOffset>= 10){
+                                return
+                            }else{
+                                layer.hAlert(res.message,1);
+                            }
                             layer.hAlert(res.message,1);
                         }
                         if(res.commodityList){
