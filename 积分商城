@@ -1,97 +1,213 @@
-<script>
-    //初始数据
-    var lock = true;//如果为false不请求数据
-    var pageOffset = 0;//分页
-    var pageMax = 100;//每页显示个数
-    initData();
-    function initData(){
-        var num = "hot",j = $("#item-"+num).index();
-        $(".gold-mall-tab a").eq(j).addClass("active").siblings().removeClass("active");
-        $(".item").eq(j).show().siblings().hide();
-        getListData(num,true);
-        getBanner();
-    }
-    function getBanner(){
-        var isWeixin=/MicroMessenger/i.test(navigator.userAgent);
-        $.ajax({
-            url:"${createLinkWeb(controller: 'commodity', action: 'homeBxbInfo')}",
-            beforeSend:function(){
-                $(".loading").html("<img src='${resource(file: 'js/layer1.9/skin/default/loading-1.gif')}' />")
-            },
-            success:function(res){
-                $(".loading").hide();
-                if(!res.success){
-                    layer.hAlert(res.message,1);
-                }
-                if(!res.bxbNum){
-                    res.bxbNum = 0
-                }
-                res.isWeixin = isWeixin;
-                var banner = template('banner', res);
-                $('#gold-mall-banner').html(banner);
-            }
-        });
-    }
-    function getListData(nowTab,isFirst){
-        var classType = 0;
-        if(nowTab == "hot"){classType = 0}
-        else if(nowTab == "card"){classType = 1}
-        else{classType = 2}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="layout" content="mcenter"/>
+    <link rel="stylesheet" href="${resource(file: 'assets/mobile/css/reset.css')}?v=${g.version()}" />
+    <link rel="stylesheet" href="${resource(file: 'assets/mobile/css/commodity.css')}?v=${g.version()}" type="text/css" />
+    <script src="${resource(file: '/js/artTemplate.js')}"></script>
+</head>
 
-        if(isFirst){
-            pageOffset = 0;
-            lock = true;
+<body class='${isApp()?"isapp":""}' data-url="${createLinkCenter(controller: 'home', action: 'index')}">
+<div class="gold-mall">
+    <div class="gold-mall-banner" id="gold-mall-banner"></div>
+    <div class="gold-mall-bottom">
+        <div class="gold-mall-tab clearfix">
+            <a href="javascript:void(0)" class="fl" data-tab="hot">
+                <div class="coin"><img src="${resource(file: 'assets/mobile/images/commodity/tab-hot.png')}" alt/></div>
+                <p>热门礼品</p>
+            </a>
+            <a href="javascript:void(0)" class="fl" data-tab="card">
+                <div class="coin"><img src="${resource(file: 'assets/mobile/images/commodity/tab-card.png')}" alt/></div>
+                <p>卡券礼品</p>
+            </a>
+            <a href="javascript:void(0)" class="fl" data-tab="kind">
+                <div class="coin"><img src="${resource(file: 'assets/mobile/images/commodity/tab-kind.png')}" alt/></div>
+                <p>实物礼品</p>
+            </a>
+        </div>
+        <div class="gold-mall-list clearfix">
+            <div id="item-hot" data-id="hot" class="clearfix item"></div>
+            <div id="item-card" data-id="card" class="clearfix item"></div>
+            <div id="item-kind" data-id="kind" class="clearfix item"></div>
+        </div>
+    </div>
+    <div class="loading"><img src='${resource(file: 'js/layer1.9/skin/default/loading-1.gif')}' /></div>
+</div>
+<script id="banner" type="text/html">
+<div class="banner-top">
+    <img src="${resource(file: 'assets/mobile/images/commodity/banner.png')}" alt/>
+    <div class="gold-sign">
+        <div class="gold-num">
+            <img src="${resource(file: 'assets/mobile/images/commodity/coin.png')}" alt/>
+            <span>{{sumBxbNum}}</span>
+        </div>
+        {{if !isWeixin}}
+        <a href="${getSiteString(key: "appMark")}://APPSignIn">签到币 &gt;</a>
+        {{/if}}
+    </div>
+</div>
+{{if overdueBxbNum}}
+<div class="gold-time">
+    {{overdueBxbNum}}枚
+    {{if overdueDate == serverTime}}
+        于年底到期
+    {{else}}
+       即将过期
+    {{/if}}
+</div>
+{{/if}}
+</script>
+<script id="list" type="text/html">
+<ul>
+    {{if commodityList && commodityList.length > 0}}
+        {{each commodityList as item i}}
+        <li class="fl commodity" id="{{item.commodityId}}">
+            <div class="goods t_c"><img src="//bxwd-img.oss-cn-hangzhou.aliyuncs.com/{{item.commodityImg}}" alt/></div>
+            <p class="goods-title distance">{{item.commodityName}}</p>
+            <p class="goods-info distance">{{item.commodityTitle}}</p>
+            <div class="clearfix need-gold distance">
+                <p class="fl"><img src="${resource(file: 'assets/mobile/images/commodity/coin.png')}" alt/>&nbsp;<span>{{item.bxbNum}}</span></p>
+                <p class="fr">剩余{{item.commoditySurplusNum>999?item.commoditySurplusNum+"+":item.commoditySurplusNum}}份</p>
+            </div>
+        </li>
+        {{/each}}
+    {{else}}
+        <p class="noData">暂无数据</p>
+    {{/if}}
+</ul>
+</script>
+<div class="loading"></div>
+<script type="text/javascript">
+    $(function () {
+//初始数据
+        var lock = true;//如果为false不请求数据
+        var pageOffset = 0;//分页
+        var pageMax = 10;//每页显示个数
+        var i = 0;//tab
+        var tab = getQueryString("tab");
+        if(tab){
+            i = tab;
         }
-    //数据接口
-    if(lock){
+        initData();
+        function initData(){
+            var num = "hot",j = $("#item-"+num).index();
+            if(tab){
+                j = tab;
+                num = $(".item").eq(j).attr("data-id");
+            }
+            $(".gold-mall-tab a").eq(j).addClass("active").siblings().removeClass("active");
+            $(".item").eq(j).show().siblings().hide();
+            getListData(num);
+            getBanner();
+        }
+        function getBanner(){
+            var isWeixin=/MicroMessenger/i.test(navigator.userAgent);
             $.ajax({
-                url:"${createLinkWeb(controller: 'commodity', action: 'homeCommodityList')}",
-                data:{classType:classType,offset:pageOffset,max: pageMax},
-                type:"post",
-                success:function(res){
+                url:"${createLinkWeb(controller: 'commodity', action: 'homeBxbInfo')}",
+                beforeSend:function(){
+                    $(".loading").show();
+                },
+                success:function(res,status,xhr){
+                    time = xhr.getResponseHeader("Date");
+                    $(".loading").hide();
                     if(!res.success){
                         layer.hAlert(res.message,1);
                     }
-                    if(res.commodityList){
-                        pageOffset += res.commodityList.length;
-                        if(res.commodityList.length < pageMax){
-                            lock = false;
-                        }
-                        if(res.commodityList.length == 0){
-                            return
-                        }
+                    if(!res.sumBxbNum){
+                        res.sumBxbNum = 0
                     }
-                    var html = template('list', res);
-                    if(isFirst){
-                        $('#item-'+nowTab).html(html);
-                    }else{
-                        $('#item-'+nowTab).append(html);
-                    }
-                    exchange();
+                    res.isWeixin = isWeixin;
+                    res.overdueDate = new Date(res.overdueDate).getFullYear();
+                    res.serverTime = new Date(time).getFullYear() ;
+                    var banner = template('banner', res);
+                    $('#gold-mall-banner').html(banner);
                 }
             });
-    }
-    }
-    //切换tab
-    $(".gold-mall-tab a").on("click",function(e){
-        var k = $(this).index();
-        $(".active").removeClass("active");
-        $(this).addClass("active");
-        $(".item").eq(k).show().siblings().hide();
-        if($(".item").eq(k).find("li").length > 0){
-            return;
         }
-        getListData(e.currentTarget.dataset.tab,true);
-    });
-    //跳转详情
-    function exchange(){
-        $(".commodity").on("click",function(){
-            var commodityId = $(this).attr("id");
-            location.href = "${createLinkWeb(controller: 'commodity',action: 'detail')}?commodityId="+commodityId;
+        function getListData(nowTab){
+            //数据接口
+            if(lock){
+                lock = false;
+                $.ajax({
+                    url:"${createLinkWeb(controller: 'commodity', action: 'homeCommodityList')}",
+                    data:{classType:i,offset:pageOffset,max: pageMax},
+                    type:"post",
+                    success:function(res){
+                        lock = true;
+                        if(!res.success){
+                            lock = false;
+                            layer.hAlert(res.message,1);
+                        }
+                        if(res.commodityList){
+                            pageOffset += res.commodityList.length;
+                            if(res.commodityList.length < pageMax){
+                                lock = false;
+                            }
+                            if(res.commodityList.length == 0){
+                                return
+                            }
+                        }
+                        var html = template('list', res);
+                        $('#item-'+nowTab).append(html);
+                        exchange();
+                    }
+                });
+            }
+        }
+        //切换tab
+        $(".gold-mall-tab a").on("click",function(e){
+            i = $(this).index();
+            $(".active").removeClass("active");
+            $(this).addClass("active");
+            $(".item").eq(i).show().siblings().hide();
+            pageOffset = 0;
+            var tabArray=['hot','card','kind']
+            $('#item-'+tabArray[i]).html("");
+            lock = true;
+            getListData(e.currentTarget.dataset.tab);
         });
-    }
-    $(window).bind('scroll', function () {
-        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-            getListData($(".active")[0].dataset.tab,false)
+        //跳转详情
+        function exchange(){
+            $(".commodity").on("click",function(){
+                var commodityId = $(this).attr("id");
+                location.href = "${createLinkWeb(controller: 'commodity',action: 'detail')}?commodityId="+commodityId+"&tab="+i;
+            });
         }
+        $(window).bind('scroll', function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                getListData($(".active")[0].dataset.tab)
+            }
+        })
+
+            var wechatShare=new WeChatShare();
+            var shareData ={
+            shareConfig:{
+                title: "",
+                desc: "",
+                link: location.href,
+                imgUrl: ""
+            },
+            menuList:{
+                menuList: [
+                    'menuItem:readMode', // 阅读模式
+                    'menuItem:share:timeline', // 分享到朋友圈
+                    'menuItem:copyUrl', // 复制链接
+                    'menuItem:share:appMessage'
+                ]
+            },
+            callback:function(response){
+
+            }
+        }
+        setTimeout(function(){
+            wechatShare.init(shareData);
+        },0)
     })
+</script>
+</body>
+</html>
