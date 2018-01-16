@@ -465,3 +465,13 @@ function name(value){
     e.currentTarget.dataset.tab
 ## 后台返回含标签修改为文案
     $(".gold-mall-bottom").html($('<div>').html(res.commodityVO.synopsis).text());
+## 滚动到顶部固定
+var tabTop = $(".gold-mall-tab").offset().top;
+    $(window).scroll(function(){
+        var nowTop =  $(this).scrollTop();
+        if(tabTop<=nowTop){
+            $(".gold-mall-tab").addClass("fixed");
+        }else{
+            $(".gold-mall-tab").removeClass("fixed");
+        }
+    })
