@@ -261,6 +261,9 @@
         }
         var serverTime = getServerTime().getTime(),
         time = new Date('2017/05/09 00:00:00').getTime();//当前时间
+        
+## 绑定服务器的时间
+       result._serviceDate = new Date(arguments[2].getResponseHeader("Date"))
 ##  题目
 
     1、eval是做什么的？有什么类似的api吗？
