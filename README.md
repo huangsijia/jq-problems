@@ -478,3 +478,7 @@ var tabTop = $(".gold-mall-tab").offset().top;
             $(".gold-mall-tab").removeClass("fixed");
         }
     })
+## 屏蔽emoji
+    $("input").on('input',function(){    
+        this.value = this.value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+    })
