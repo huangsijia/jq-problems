@@ -482,3 +482,7 @@ var tabTop = $(".gold-mall-tab").offset().top;
     $("input").on('input',function(){    
         this.value = this.value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
     })
+    
+## 调试
+    <script src="//cdn.bootcss.com/eruda/1.3.0/eruda.min.js"></script>
+    <script>eruda.init();</script>
