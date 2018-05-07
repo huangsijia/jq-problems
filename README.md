@@ -486,3 +486,22 @@ var tabTop = $(".gold-mall-tab").offset().top;
 ## 调试
     <script src="//cdn.bootcss.com/eruda/1.3.0/eruda.min.js"></script>
     <script>eruda.init();</script>
+
+## 移动
+touchstart(e) {
+            if (this.touchFlag) {
+                e.stopPropagation();
+            }
+        },
+        touchmove(e) {
+            var current_touchmoveTop = $(".pullData").offset().top;
+            if (
+                this.touchmoveLastTop == current_touchmoveTop &&
+                current_touchmoveTop > 0
+            ) {
+                this.touchFlag = false;
+            } else {
+                this.touchFlag = true;
+            }
+            this.touchmoveLastTop = current_touchmoveTop;
+        },
