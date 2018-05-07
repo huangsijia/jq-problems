@@ -505,3 +505,58 @@ touchstart(e) {
             }
             this.touchmoveLastTop = current_touchmoveTop;
         },
+        
+## 上拉 下翻
+<div v-html="pullData" class="pullData" @touchstart='touchstart($event)'  @touchmove="touchmove($event)"></div>
+touchFlag: true, // touchstart 阻止冒泡的开关
+                swiperOption: {
+                    direction: "vertical",
+                    on: {
+                        slideChange() {
+                            if (this.activeIndex === 0) {
+                                $(".detail").css("paddingBottom", 0);
+                                self.touchFlag = true;
+                                self.firstInset = true;
+                            } else {
+                                $(".detail").css( "paddingBottom", $(".pullData").height() - $(window).height() + 150 );
+                                
+                            }
+                        }
+                    }
+                },
+                startY: 0,
+                endY: 0,
+                backTop:false,
+                firstInset:true,
+touchstart(e) {
+        //翻到第二页，没有下拉
+        if(window.pageYOffset == 0 && this.firstInset){
+            this.touchFlag=false;
+        }
+        //翻到第二页，下拉之后
+        if(window.pageYOffset == 0 && this.backTop){
+            this.touchFlag=false;
+        }
+        if (this.touchFlag) {
+            e.stopPropagation();
+        }
+        this.startY = e.touches[0].clientY;
+    },
+    touchmove(e) {
+        if(window.pageYOffset == 0){
+            this.touchFlag=false;
+        }else{
+            this.touchFlag=true;
+        }
+        this.endY = e.touches[0].clientY;
+        if(this.endY<this.startY){// 向下
+            this.touchFlag=true;
+            this.firstInset=false;
+        }else{
+            this.backTop=true;// 向下
+        }
+        if (this.touchFlag) {
+            e.stopPropagation();
+        }
+
+    },
