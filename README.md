@@ -561,6 +561,13 @@ touchstart(e) {
 
     },
 ## 滚动加载
+parameter: {
+        offset: 0,
+        max:10,
+    },
+    loadEnd: false,
+    initLock: true,
+    hasNext: true,//没有数据了，不用继续往下
         loadMore() {
         //上拉加载更多
         if (this.initLock) {
@@ -574,7 +581,7 @@ touchstart(e) {
         }
         this.loading = true;
         this.$public.API_GET({
-            url: "getArtworkListOn",
+            url: "a",
             data: this.parameter,
             success: result => {
                 for(var item in result.data){
@@ -596,7 +603,7 @@ touchstart(e) {
         this.list=[];
         this.loadEnd=false;
         this.$public.API_GET({
-            url: "getArtworkListOn",
+            url: "a",
             data: this.parameter,
             success: result => {
                 this.loadEnd = true;
