@@ -560,3 +560,56 @@ touchstart(e) {
         }
 
     },
+## 滚动加载
+        loadMore() {
+        //上拉加载更多
+        if (this.initLock) {
+            return;
+        }
+        if (!this.hasNext) {
+            return;
+        }
+        if(this.loading){
+            return
+        }
+        this.loading = true;
+        this.$public.API_GET({
+            url: "getArtworkListOn",
+            data: this.parameter,
+            success: result => {
+                for(var item in result.data){
+                    this.list.push(result.data[item])
+                }
+                this.parameter.offset += this.parameter.max;
+                this.loading = false;
+                if (result.data.length < this.parameter.max) {
+                    this.hasNext = false;
+                }
+            }
+        });
+        },
+        initDataFun(finishFun) {
+        //初始化信息&&下拉刷新
+        this.parameter.offset = 0;
+        this.parameter.max = 10;
+        this.hasNext=true;
+        this.list=[];
+        this.loadEnd=false;
+        this.$public.API_GET({
+            url: "getArtworkListOn",
+            data: this.parameter,
+            success: result => {
+                this.loadEnd = true;
+                this.list = result.data;
+                this.parameter.offset += this.parameter.max;
+                if (result.data.length < this.parameter.max) {
+                    this.hasNext = false;
+                }
+                this.initLock = false;
+                //下拉刷新释放函数
+                if (typeof finishFun == "function") {
+                    finishFun();
+                }
+            }
+        });
+        },
