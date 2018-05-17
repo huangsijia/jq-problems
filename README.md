@@ -620,3 +620,5 @@ parameter: {
             }
         });
         },
+## 转码
+encodeURIComponent
