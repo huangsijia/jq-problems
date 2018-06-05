@@ -622,3 +622,12 @@ parameter: {
         },
 ## 转码
 encodeURIComponent
+
+## 绑定服务器的时间.replace(/\-/g,'/')
+var _date = xhr.getResponseHeader("Date");
+// 绑定服务器的时间
+if (_date) {
+    playoffs = new Date(_date).getTime();
+} else {
+    playoffs = new Date().getTime();
+}
