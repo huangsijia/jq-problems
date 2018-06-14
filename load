@@ -1,0 +1,98 @@
+$(function () {
+    //初始数据
+    var lock = true; // 防止多次请求
+    var isLoadMore = true; // 加载更多
+    var menu = $(".menu");
+    var first = true;
+    var sendData = {
+        commodityTypeCode: getQueryString("code"),
+        offset: 0,
+        max: 10,
+        sort: 0
+    };
+    getListData();
+    function getQueryString(name) {
+        var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+    $("li").on("click", function () {
+        var type = $(this).data("type");
+        if (sendData.sort === type) {
+            return false;
+        }
+        $(this).addClass("on").siblings("li").removeClass("on");
+        if (type) {
+            sendData.offset = 0;
+            sendData.sort = type;
+            getListData();
+        }
+        if ($(this).hasClass("coin")) {
+            menu.show();
+        } else {
+            menu.hide();
+        }
+    });
+    menu.find("span").on("click", function () {
+        var type = $(this).data("type");
+        if (sendData.sort === type) {
+            return false;
+        }
+        $(this).addClass("on").siblings().removeClass("on");
+        if (type === 1) {
+            $(".coin").addClass("down").text($(this).text());
+        } else {
+            $(".coin").removeClass("down").text($(this).text());
+        }
+        menu.hide();
+        sendData.offset = 0;
+        sendData.sort = type;
+        getListData();
+    });
+
+    function getListData(isAppend) {
+        if (!lock) {
+            return false;
+        }
+        $.ajax({
+            url: "地址",
+            data: sendData,
+            type: "post",
+            success: function (res) {
+                lock = true;
+                if (!res.success) {
+                    layer.msg(res.message);
+                    isLoadMore = false;
+                    return false;
+                }
+                if (first) {
+                    first = false;
+                    share(res.articleMap);
+                }
+                if (isAppend) {
+                    $('#item-hot').append(template('list', res));
+                } else {
+                    $('#item-hot').html(template('list', res));
+                    isLoadMore = true;
+                }
+                if (res.commodityList && res.commodityList.length) {
+                    sendData.offset += res.commodityList.length;
+                }
+                //少于pageMax请求
+                if (res.count <= sendData.offset) {
+                    isLoadMore = false;
+                }
+            }
+        });
+    }
+    $(window).bind('scroll', function () {
+        if (!isLoadMore) {
+            return false;
+        }
+        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+            getListData(true)
+        }
+    });
+})
