@@ -635,3 +635,5 @@ if (_date) {
     $(document).keypress(function(e) {
         if(e.which == 13) {}
      }
+## 输入框文字变化时执行以下代码
+    $("#picker-filter").bind('input propertychange',function () {
