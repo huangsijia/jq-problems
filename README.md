@@ -637,3 +637,14 @@ if (_date) {
      }
 ## 输入框文字变化时执行以下代码
     $("#picker-filter").bind('input propertychange',function () {
+    
+## 滚动定位
+    $(".nav li").click(function(){
+        var index=$(this).index();
+        var h=0;
+        $(this).addClass("on").siblings().removeClass("on");
+        for(var i=0;i<index;i++){
+            h += $(".part" + i).height();
+        }
+        $("html,body").animate({ scrollTop: h + 20 }, 1000);
+    })
