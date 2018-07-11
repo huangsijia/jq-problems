@@ -648,3 +648,15 @@ if (_date) {
         }
         $("html,body").animate({ scrollTop: h + 20 }, 1000);
     })
+    $(window).scroll(function () {
+        var liLength = $(".nav li").length;
+        var scrollHeight = 0;
+        for (var j = 0; j < liLength; j++) {
+            scrollHeight += $(".part" + j).height();
+            if($(document).scrollTop() == 0){
+                $(".nav li").eq(0).addClass("on").siblings().removeClass("on")
+            }else if (scrollHeight < $(document).scrollTop()) {
+                $(".nav li").eq(j+1).addClass("on").siblings().removeClass("on")
+            }
+        }
+    })
