@@ -1,0 +1,387 @@
+770-SNAPSHOT(function () {
+                      seajs.use(["main", "layer"], function (main) {
+                        main.init();
+                        var allVoucherList = { data: [] };
+                        var usedList = { data: [] };
+                        var initData = {};
+                        var recorlList = [];
+
+                        function render() {
+                            if(localStorage.getItem('pop')){
+                                openpop();
+                                localStorage.removeItem("pop");
+                            }
+                            if (!initData.isPassRisk){
+                                getIssue();
+                                return false;
+                            }
+                            $(".autoMain").html(template('autoMain-js', initData));
+                            $(".fromSelectAddInput").html(template('unselect-js', usedList));
+                            $(".historyAmount").text(formatMoney($(".historyAmount").text()));
+                            $(".maxInvestAmount").val(delcommafy($(".maxInvestAmount").val()));
+                            selectChange();
+                            recordFun();
+                            agreementFun();
+                            modifyFun();
+                            sureFun();
+                            clickInput();
+                            clickCyclesFun();
+                            inputFun();
+                            agreeFun();
+                        }
+
+
+                        function initFun() {
+                            $.ajax({
+                                url: "",
+                                success: function (res) {
+                                    if (!res) {
+                                        initData.readonly = false;
+                                        location.href = "/login/index.html";
+                                        return false;
+                                    }
+                                    if (isEmptyObject(res.result) && !localStorage.getItem("onceShow", true)) {
+                                        $(".protocol").show();
+                                        $(".install").hide();
+                                    }
+                                    if (res) {
+                                        if (res.result.maxInvestAmount) {
+                                            res.result.maxInvestAmount = formatMoney(res.result.maxInvestAmount);
+                                        }
+                                        if(!res.result.enabled){
+                                            res.result={};
+                                        }
+                                        initData = res;
+                                        if(res.result.enabled){
+                                            initData.readonly = res.result.enabled;
+                                        }else{
+                                            initData.readonly = false;
+                                        }
+                                        //select模板渲染
+                                        if (res.result.voucherList) {
+                                            allVoucherList.data = res.result.voucherList;
+                                            usedList.data = res.result.voucherList
+                                        }
+
+                                        render();
+                                        availableVouchersFun()
+                                    }
+                                }
+                            })
+                        }
+                        initFun();
+                       
+                        function clickInput() {
+                            if (initData.readonly) {
+                                return false;
+                            }
+                            $("#state").on("click", function () {
+                                $(this).toggleClass("checked");
+
+                                initData.result.enabled = $("#state").hasClass("checked");
+                                initData.readonly = false;
+                                if (initData.result.enabled == false) {
+                                    initData.result = {};
+
+                                }
+                                allVoucherList.data = [];
+                                usedList.data = [];
+                                render();
+                                addDeleteFun();
+                            });
+
+                            $(".sigleRadio.once").on("click", function () {
+                                
+                                if (!$(".fromSelectAddInput").html()) {
+                                    return false;
+                                }
+                                $(this).toggleClass("checked");
+                                if ($(this).hasClass("once")) {
+                                    $(this).addClass("checked").siblings().removeClass("checked");
+                                }
+                            })
+                        }
+                        
+                        function selectChange() {
+                            $("#mySelect").change(function () {
+                                addSelect($(this).find("option").eq($(this).get(0).selectedIndex).attr("id"));
+                            })
+                        }
+                       
+                        function addSelect(id) {
+                            var s = $(allVoucherList.data).filter(function (ea) {
+                                return this.id == id;
+                            });
+                            usedList.data.push(s[0]);
+                            addDeleteFun();
+                        }
+                       
+                        function unSelect(id) {
+                            usedList.data = $(usedList.data).filter(function () {
+                                return this.id != id;
+                            }).toArray();
+                            addDeleteFun();
+                        }
+                        
+                        function addDeleteFun() {
+                            var lastOptions = $(allVoucherList.data).filter(function () {
+                                var _this = this;
+                                return $(usedList.data).filter(function () {
+                                    return this.id == _this.id;
+                                }).length == 0;
+                            }).toArray();
+
+
+                            $("#mySelect").html(template("select-js", { data: lastOptions }));
+                            $(".fromSelectAddInput").html(template("unselect-js", usedList));
+
+                            $(".envelopes").on("click", function () {
+                                var id = $(this).attr("id");
+                                unSelect(id);
+                                if (!$(".fromSelectAddInput").html()) {
+                                    $("#allow").addClass("checked").siblings().removeClass("checked");
+                                }
+                            });
+                        }
+                       
+                        function sureFun() {
+                            $(".sure").on("click", function () {
+                                if (!$("#state").hasClass("checked")) {
+                                    saveFun();
+                                    return false;
+                                }
+                                if (!$(".maxInvestAmount").val() || !$(".term .once").hasClass("checked")) {
+                                    checkVouchersFun();
+                                    return false;
+                                }
+                                layer.open({
+                                    area: ["427px"],
+                                    skin: "layerPad",
+                                    content: "",
+                                    yes: function (index) {
+                                        saveFun(index);
+                                    }
+                                })
+                            })
+                        }
+                        
+                        function recordFun() {
+                            $(".record").on("click", function () {
+                                openpop();
+                            })
+                        }
+                        
+                        function agreementFun() {
+                            $(".agreement").on("click", function () {
+                                layer.open({
+                                    title: false,
+                                    type: 1,
+                                    area: ['1050px', '820px'], //宽高
+                                    content: ''
+                                })
+                            })
+                        }
+                        //处理金额,千分位保留两位小数
+                        function formatMoney(num) {
+                            num = Number(Math.abs(num).toFixed(2));
+                            var num = (num || 0).toString(), result = '';
+                            var arr = [];
+                            var first = num;
+                            var last = "00";
+                            if (/.*\..*/.test(num)) {
+                                arr.push(num.split("."));
+                                first = arr[0].slice(0, 1);
+                                last = arr[0].slice(1);
+                            }
+                            first = first.toString();
+                            while (first.length > 3) {
+                                result = ',' + first.slice(-3) + result;
+                                first = first.slice(0, first.length - 3);
+                            }
+                            if (num) { result = first + result + "." + last; }
+                            return result;
+                        }
+                       
+                        function modifyFun() {
+                            $(".modify").on("click", function () {
+
+                                initData.readonly = false;
+                                render();
+                                availableVouchersFun();
+                            })
+                        }
+                       
+                        function checkVouchersFun() {
+                            if ($(".term .once").hasClass("checked")) {
+                                $(".term .once").siblings(".red").hide();
+                            } else {
+                                $(".term .once").siblings(".red").show();
+                            }
+                            if ($(".maxInvestAmount").val()) {
+                                $(".maxInvestAmount").siblings(".red").hide();
+                            } else {
+                                $(".maxInvestAmount").siblings(".red").show();
+                            }
+
+                            if (!$(".maxInvestAmount").val() || !$(".term .once").hasClass("checked")) {
+                                return false;
+                            }
+                            availableVouchersFun();
+                        }
+                        
+                        function availableVouchersFun() {
+                            $.ajax({
+                                url: "",
+                                data: ,
+                                success: function (res) {
+                                    if (res) {
+                                        allVoucherList.data = res;
+                                        addDeleteFun();
+                                    }
+
+                                }
+                            })
+                        }
+                        
+                        function clickCyclesFun() {
+                            $(".term .once").on('click', function () {
+                                $(this).toggleClass("checked");
+                                if ($(this).hasClass("once")) {
+                                    $(this).addClass("checked").siblings().removeClass("checked");
+                                }
+                                initData.result.leCycle = $(this).attr("data-id");
+                                initData.result.predictRate = $(this).attr("data-predictRate");
+                                initData.result.maxInvestAmount = '';
+                                allVoucherList.data = [];
+                                usedList.data = [];
+                                render();
+                                addDeleteFun();
+                            })
+                        }
+                        
+                        function inputFun() {
+                            $(".maxInvestAmount").on("input propertychange", function () {
+                                var thisVal = $(this).val();
+                                $(this).val($(this).val().trim() == "" || !$(this).val().trim() ? "0" : parseFloat($(this).val()));
+                                if (thisVal < 100 || !thisVal) {
+                                    $(".maxInvestAmount").siblings(".red").show().text("* 不低于最低投资额100");
+                                    return
+                                }
+                                checkVouchersFun();
+                                $("#mySelect").html(template('select-js', { data: [] }));
+                                $(".fromSelectAddInput").html(template('unselect-js', { data: [] }));
+                            })
+                        }
+                        
+                        function saveFun(index) {
+                            var sendVoucherIds = $.map(usedList.data, function (n) {
+                                return n.id
+                            })
+                            var sendData = {
+                                "enabled": $("#state").hasClass("checked"),
+                                "leCycle": $(".term .checked").val(),
+                                "maxInvestAmount": $(".maxInvestAmount").val() ? $(".maxInvestAmount").val() : 0,
+                                "isUseVoucher": sendVoucherIds.length > 0,
+                                "voucherStrategy": $(".sigleRadio.checked").val(),
+                            }
+                            if (sendVoucherIds.length > 0) {
+                                sendData.voucherIds = sendVoucherIds.join(',')
+                            }
+                            $.ajax({
+                                url: "",
+                                data: sendData,
+                                success: function (res) {
+                                    if (res) {
+                                        layer.msg(res.message);
+                                        layer.close(index);
+                                        if (res.success) {
+                                            setTimeout(function(){
+                                                location.reload();
+                                            },200)
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                        //去除千分位
+                        function delcommafy(num) {
+                            if (!num) {
+                                return "";
+                            }
+                            num = num.replace(/,/gi, '');
+                            return num;
+                        }
+                        
+                        function agreeFun() {
+                            $(".agree").on("click", function () {
+                                $(".protocol").hide();
+                                $(".install").show();
+                                localStorage.setItem("onceShow", true);
+                            })
+                        }
+                        //判断是否为空对象
+                        function isEmptyObject(obj) {
+                            for (var key in obj) {
+                                return false;
+                            }
+                            return true;
+                        }
+                        
+                        function getData() {
+                                $.ajax({
+                                    url: "",
+                                    data: {
+                                        max: 10,
+                                        offset: recorlList.length
+                                    },
+                                    success: function (res) {
+                                        if (res && res.autoInvestOperLogs.length > 0) {
+                                            recorlList = recorlList.concat(res.autoInvestOperLogs);
+                                            $("#layerRecord").append(template("layerRecord-js", res));
+                                        } 
+                                    }
+                                })
+
+                            }
+
+                            
+                            function openpop() {
+                                layer.open({
+                                    type:1,
+                                    title: "运行记录",
+                                    area: ["688px", "600px"],
+                                    btn: false,
+                                    skin: "layerPad",
+                                    scrollbar: false,
+                                    content: $("#layerRecord"),
+                                    cancel: function () {
+                                        resetScroll();
+                                    }
+                                })
+                                getData();
+                                scrollFun();
+                            }
+
+
+                            function scrollFun() {
+                                $(".layui-layer-content").scroll(function () {
+                                    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                                        getData();
+                                    }
+                                })
+                            }
+
+                            function resetScroll() {
+                                recorlList = [];
+                                $(".layui-layer-content").unbind('scroll');
+
+                            }
+                        //getQueryString方法
+                        function getQueryString(name) {
+                            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                            var r = window.location.search.substr(1).match(reg);
+                            if (r != null) return unescape(r[2]);
+                            return null;
+                        }
+                      });
+                  })()
