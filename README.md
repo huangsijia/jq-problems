@@ -663,3 +663,4 @@ if (_date) {
 
 ## Html5使用history对象history.pushState()和history.replaceState()方法添加和修改浏览历史记录
     history.pushState(null,null,'22')
+    https://blog.csdn.net/u012028371/article/details/67636395
