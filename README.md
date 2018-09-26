@@ -674,6 +674,7 @@ if (_date) {
         window.scrollTo(0, this.scrollTopVal - this.scrollTopVal / 5);
     }
     this.scrollTopVal = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+    window.onscroll = this.scrollTopVal;
 ## 购物车加减
     if (type) {
         this.count + 1 > this.inventory ? "" : ++this.count;
