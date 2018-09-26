@@ -667,3 +667,5 @@ if (_date) {
     
 ## serialize输出序列化表单值的结果：
     serialize
+## scrollIntoView 参数为true时调用该函数，页面（或容器）发生滚动，使element的顶部与视图（容器）顶部对齐
+    this.$refs.goodsDetail.scrollIntoView(true);
