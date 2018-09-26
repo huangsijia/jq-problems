@@ -669,3 +669,16 @@ if (_date) {
     serialize
 ## scrollIntoView 参数为true时调用该函数，页面（或容器）发生滚动，使element的顶部与视图（容器）顶部对齐
     this.$refs.goodsDetail.scrollIntoView(true);
+    if (this.scrollTopVal > 0) {
+        window.requestAnimationFrame(this.goTop);
+        window.scrollTo(0, this.scrollTopVal - this.scrollTopVal / 5);
+    }
+    this.scrollTopVal = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+## 购物车加减
+    if (type) {
+        this.count + 1 > this.inventory ? "" : ++this.count;
+      } else {
+        --this.count <= 0 ? (this.count = 1) : "";
+      }
+## Array.isArray()判断某个值是否为数组，返回布尔类型
+    Array.isArray()判断某个值是否为数组
