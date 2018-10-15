@@ -683,3 +683,189 @@ if (_date) {
       }
 ## Array.isArray()判断某个值是否为数组，返回布尔类型
     Array.isArray()判断某个值是否为数组
+    
+## 商城
+    <link rel="stylesheet" type="text/css" href="./js/swiper/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/reset.css">
+    <link rel="stylesheet" href="css/style.min.css">
+    <script src="./js/jquery-1.11.1.min.js"></script>
+    <script src="./js/artTemplate.js"></script>
+
+    <div class="main main-list">
+        <div class="top">
+            <div class="fl">
+                <a class="back" href="./index.html"><img src="./images/back.png" alt="" /></a>
+                <a class="share" href=""><img src="./images/share.png" alt="" /></a>
+            </div>
+            <div class="fr logo"><img src="./images/logo.png" alt="" /></div>
+        </div>
+        <div class="content">
+            <div class="title"><img src="./images/logo-2.png" alt="" /></div>
+            <div class="waterfall">
+                <script id="waterfall" type="text/html">
+                    {{each list}}
+                    <div class="item">
+                        <a href="./detail.html">
+                            <img src="{{$value.src}}" alt="{{$value.title}}" />
+                            <div class="cont">
+                                <div class="txt">{{$value.title}}</div>
+                                <div class="support {{$value.isSupport ? 'on' : ''}}">{{$value.num}}</div>
+                            </div>
+                        </a>
+                    </div>
+                    {{/each}}
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="share-mask">
+        <img src="./images/share-mask.png" alt="" />
+    </div>
+    <script>
+        var data = {
+            list: [{
+                src: "./images/pic-01.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: false
+            }, {
+                src: "./images/pic-02.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: true
+            }, {
+                src: "./images/pic-02.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: true
+            }, {
+                src: "./images/pic-01.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: false
+            }, {
+                src: "./images/pic-01.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: false
+            }, {
+                src: "./images/pic-02.jpg",
+                title: "特意早早找好地图，从苏州驱车前往",
+                num: "456",
+                isSupport: false
+            }]
+        };
+        var addList = [{
+            src: "./images/pic-01.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: false
+        }, {
+            src: "./images/pic-02.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: true
+        }, {
+            src: "./images/pic-02.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: true
+        }, {
+            src: "./images/pic-01.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: false
+        }, {
+            src: "./images/pic-01.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: false
+        }, {
+            src: "./images/pic-02.jpg",
+            title: "特意早早找好地图，从苏州驱车前往",
+            num: "456",
+            isSupport: false
+        }];
+
+        $(".waterfall").html(template('waterfall', data));
+
+        setTimeout(() => {
+            init()
+            waterfall()
+        });
+
+        // 显示分享层
+        $(".share").on("click", function(e){
+            e.preventDefault();
+
+            $(".share-mask").fadeIn();
+        })
+
+        // 关闭分享层
+        $(".share-mask").on("click", function(){
+            $(this).fadeOut();
+        })
+
+        // 初始化方法
+        function init() {
+            // 点赞
+            $(".support").on("click", function () {
+                if ($(this).hasClass("on")) {
+                    return false;
+                }
+
+                $(this).addClass("on");
+            })
+        }
+
+        //实现瀑布流布局的函数
+        function waterfall() {
+            var items = $("div.item"); //获取到所有的类名为item的元素
+            var postop = []; //这个数组用来存放item定位的高度
+            var itemWidth = items.eq(0).width(); //宽度都是一样的,所以随便获取一个就行
+            var spaceWidth = $(".waterfall").width() - itemWidth * 2;
+
+            items.each(function (index, elem) {
+                var targetItemTop = $(elem).height(); //遍历所有item并获取高度
+
+                if (index < 2) {
+                    //如果是在第一行
+                    postop[index] = targetItemTop; //把高度直接加入数组中
+                    $(elem).css({
+                        "left": itemWidth * index + (index % 2 === 0 ? 0 : spaceWidth), //设置left
+                        "top": 0 //和top
+                    });
+                } else {
+                    //其他行
+                    var mintop = Math.min.apply(null, postop); //获取数组中最小的一个
+                    var minindex = $.inArray(mintop, postop); //获取到数组最小值对应的排序
+
+                    $(elem).css({
+                        "top": mintop + 20, //设置top为数组中最小值
+                        "left": itemWidth * minindex + (minindex % 2 === 0 ? 0 : spaceWidth) //设置left
+                    });
+                }
+                postop[minindex] += $(elem).height() + 20; //更新数组
+            });
+
+            $(".waterfall").css({
+                height: Math.max.apply(null, postop)
+            });
+        }
+
+        // 监听滚动事件
+        $(document).scroll(function() {
+            var srollHeight = $(document).scrollTop();
+            
+            // 滚动到一定程度且有数据，加载更多内容
+            if (srollHeight + $(window).height() >= $(document).height() - 100 && addList.length > 0) {
+                if(addList.length > 0){
+                    data.list = data.list.concat(addList);
+                    addList = [];
+                    $(".waterfall").html(template('waterfall', data));
+                    init()
+                    waterfall()
+                }
+            }
+        });
+    </script>
