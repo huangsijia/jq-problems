@@ -869,3 +869,14 @@ if (_date) {
             }
         });
     </script>
+    
+## isWeixin /topic/201711/invite/
+    function is_weixin(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
