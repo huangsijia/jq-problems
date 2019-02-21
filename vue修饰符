@@ -1,0 +1,58 @@
+注意：修饰符可以同时使用多个,但是可能会因为顺序而有所不同。
+// https://juejin.im/entry/5c5e74685188256219174edc
+
+.lazy v-model.lazy 只有当我们光标离开输入框的时候，才会更新视图相当于在onchange事件触发更新。
+.trim v-model.trim 过滤首尾的空格
+.number v-model.number 如果先输入数字，会限制输入的只能是数字。如果先输入字符串，那它就相当于没有加.number
+.stop @click.stop 一键阻止事件冒泡
+.prevent  v-on:submit.prevent="onSubmit" 当点击提交按钮时阻止对表单的提交。相当于调用了event.preventDefault()方法。用 v-on:click.prevent.self 会阻止所有的点击，而 v-on:click.self.prevent 只会阻止对元素自身的点击。也就是从左往右判断~
+.self @click.self 只当事件是从事件绑定的元素本身触发时才触发回调。
+.once @click.once 绑定了事件以后只能触发一次
+.capture @click.capture 事件触发从包含这个元素的顶层开始往下触发。 完整的事件机制 捕获阶段--目标阶段--冒泡阶段。
+.passive v-on:scroll.passive 相当于给onscroll事件整了一个.lazy修饰符  
+.native @click.native 使用.native修饰符来操作普通HTML标签是会令事件失效的
+
+鼠标按钮修饰符
+.left 左键点击.right 右键点击.middle 中键点击 @click.right
+可以通过全局 config.keyCodes 对象自定义按键修饰符别名：
+Vue.config.keyCodes.f1 = 112
+键值修饰符 
+.keyCode  @keyup.keyCode
+//普通键 将系统修饰键和其他键码链接起来使用@keyup.ctrl.67，@mouseover.ctrl @mousedown.ctrl @click.ctrl.67=
+.enter 
+.tab
+.delete //(捕获“删除”和“退格”键)
+.space
+.esc
+.up
+.down
+
+
+.left
+.right
+//系统修饰键
+.ctrl
+.alt
+.meta
+.shift
+
+.exact @keydown.enter.exact 只是限制系统修饰键
+
+v-bind修饰符
+.sync //父组件<comp :myMessage.sync="bar"></comp> //子组件this.$emit('update:myMessage',params);
+.prop 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
