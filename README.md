@@ -880,3 +880,5 @@ if (_date) {
         }
     }
 
+## Es6
+let const includes startsWith reoprt
