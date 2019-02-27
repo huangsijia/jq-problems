@@ -881,4 +881,4 @@ if (_date) {
     }
 
 ## Es6
-let const includes startsWith reoprt
+let const includes startsWith repeat
