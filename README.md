@@ -882,3 +882,11 @@ if (_date) {
 
 ## Es6
 let const includes startsWith repeat
+新增类型：Symbol 每次生成不一样的值
+新增代理：Proxy 
+
+var user =new Proxy({},{
+    get：function(obj,prop){
+        return obj.fname+ " " + obj.lname;
+    }
+})
