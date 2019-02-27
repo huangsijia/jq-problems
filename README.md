@@ -884,6 +884,7 @@ if (_date) {
 let const includes startsWith repeat
 新增类型：Symbol 每次生成不一样的值
 新增代理：Proxy 
+新增set：去重,包含方法size,add,delete,has，clear
 
 var user =new Proxy({},{
     get：function(obj,prop){
