@@ -891,3 +891,6 @@ var user =new Proxy({},{
         return obj.fname+ " " + obj.lname;
     }
 })
+
+## 正则表达式分割字符串保留分隔符
+    var reg=new RegExp("(\\+|\\-|\\*|\\/)");
